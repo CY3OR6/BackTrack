@@ -12,9 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8faa855e3d3b784caaa595c0a3c49a0, type: 3}
   m_Name: GameConfig
   m_EditorClassIdentifier: 
-  gridWidth: 4
-  gridHeight: 4
-  cardSymbols: []
+  gridWidth: 3
+  gridHeight: 3
+  cardSymbols:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
   cardFlipDuration: 0.5
   previewDuration: 2
   mismatchResetDelay: 1

@@ -2,9 +2,9 @@ using System;
 
 public static class GameEvents
 {
-    public static System.Action<CardController> OnCardFlipped;
-    public static System.Action<CardController, CardController> OnCardsMatched;
-    public static System.Action<CardController, CardController> OnCardsMismatched;
+    public static Action<CardController> OnCardFlipped;
+    public static Action<CardController, CardController> OnCardsMatched;
+    public static Action<CardController, CardController> OnCardsMismatched;
 
     public static Action OnGameStarted;
     public static Action<GameStats> OnGameCompleted;
