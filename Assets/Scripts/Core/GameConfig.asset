@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GameConfig
   m_EditorClassIdentifier: 
   gridWidth: 3
-  gridHeight: 3
+  gridHeight: 4
   cardSymbols:
   - 0
   - 1
@@ -54,3 +54,4 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  flipEase: 27

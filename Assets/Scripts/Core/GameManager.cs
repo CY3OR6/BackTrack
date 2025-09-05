@@ -7,12 +7,12 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
 
     [Header("Setup")]
-    [SerializeField] private GameConfig config;
+    public GameConfig config;
     [SerializeField] private CardController cardPrefab;
     [SerializeField] private Transform cardParent;
 
     [Header("Runtime")]
-    [SerializeField] private List<CardController> allCards = new List<CardController>();
+    public List<CardController> allCards = new List<CardController>();
     [SerializeField] private CardController firstCard;
     [SerializeField] private CardController secondCard;
 
@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
     public int CurrentCombo { get; private set; }
     public int MatchedPairs { get; private set; }
 
-    private float gameStartTime;
+    public float gameStartTime { get; private set; }
 
     private void Awake()
     {
@@ -90,15 +90,13 @@ public class GameManager : MonoBehaviour
             CurrentTurns++;
             GameEvents.OnTurnsUpdated?.Invoke(CurrentTurns);
 
-            StartCoroutine(ProcessCardPair());
+            ProcessCardPair();
         }
     }
 
-    private IEnumerator ProcessCardPair()
+    private void ProcessCardPair()
     {
         CanFlipCards = false;
-
-        yield return new WaitForSeconds(0.5f);
 
         if (firstCard.Symbol == secondCard.Symbol)
         {
@@ -156,5 +154,42 @@ public class GameManager : MonoBehaviour
             if (card != null) Destroy(card.gameObject);
         }
         allCards.Clear();
+    }
+
+    public void LoadFromSave(SaveData saveData)
+    {
+        ClearExistingCards();
+
+        CurrentScore = saveData.score;
+        CurrentCombo = saveData.combo;
+        CurrentTurns = saveData.turns;
+        MatchedPairs = saveData.matchedPairs;
+        gameStartTime = Time.time - saveData.gameTime;
+
+        for (int i = 0; i < saveData.cardSymbols.Count; i++)
+        {
+            var card = Instantiate(cardPrefab, cardParent);
+            card.Initialize(saveData.cardSymbols[i], config);
+
+            if (saveData.cardMatched[i])
+            {
+                card.SetMatched();
+            }
+            else if (saveData.cardFlipped[i])
+            {
+                card.Flip();
+            }
+
+            allCards.Add(card);
+        }
+
+        GameEvents.OnGameStarted?.Invoke();
+        GameEvents.OnScoreUpdated?.Invoke(CurrentScore);
+        GameEvents.OnComboUpdated?.Invoke(CurrentCombo);
+        GameEvents.OnTurnsUpdated?.Invoke(CurrentTurns);
+
+        CanFlipCards = true;
+
+        Debug.Log($"Game loaded! Score: {CurrentScore}, Turns: {CurrentTurns}");
     }
 }

@@ -161,7 +161,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 90, y: -140}
+  m_AnchoredPosition: {x: 90, y: -272.5}
   m_SizeDelta: {x: 150, y: 250}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &341364351
@@ -467,7 +467,7 @@ MonoBehaviour:
   m_CellSize: {x: 150, y: 250}
   m_Spacing: {x: 15, y: 15}
   m_Constraint: 2
-  m_ConstraintCount: 2
+  m_ConstraintCount: 3
 --- !u!1 &1099573359
 GameObject:
   m_ObjectHideFlags: 0
@@ -726,7 +726,15 @@ MonoBehaviour:
   config: {fileID: 11400000, guid: ea74509a939b5484798d85fe49acecc2, type: 2}
   cardPrefab: {fileID: 341364351}
   cardParent: {fileID: 535379232}
-  allCards: []
+  allCards:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   firstCard: {fileID: 0}
   secondCard: {fileID: 0}
 --- !u!1 &1392207418

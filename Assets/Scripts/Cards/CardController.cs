@@ -17,7 +17,7 @@ public class CardController : MonoBehaviour, IPointerClickHandler
     public string Symbol { get; private set; }
     public bool IsFlipped { get; private set; }
     public bool IsMatched { get; private set; }
-    public bool CanInteract => !IsFlipped && !IsMatched;
+    public bool CanInteract => !IsFlipped && !IsMatched && GameManager.Instance.CanFlipCards;
 
     public void Initialize(string symbol, GameConfig gameConfig)
     {
@@ -25,6 +25,8 @@ public class CardController : MonoBehaviour, IPointerClickHandler
         config = gameConfig;
         symbolText.text = symbol;
         gameObject.SetActive(true);
+        Flip();
+        Invoke(nameof(Flip), config.previewDuration);
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -41,12 +43,12 @@ public class CardController : MonoBehaviour, IPointerClickHandler
         frontFace.transform.DOLocalRotate(
             new Vector3(0, !IsFlipped ? 180 : 0, 0),
             0.5f
-        ).SetEase(Ease.OutBack);
+        ).SetEase(config.flipEase);
 
         backFace.transform.DOLocalRotate(
            new Vector3(0, IsFlipped ? 180 : 0, 0),
           0.5f
-       ).SetEase(Ease.OutBack);
+       ).SetEase(config.flipEase);
     }
 
     public void SetMatched()

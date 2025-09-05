@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 [CreateAssetMenu(fileName = "GameConfig", menuName = "BackTrack/Config")]
 public class GameConfig : ScriptableObject
@@ -20,7 +21,7 @@ public class GameConfig : ScriptableObject
     public int comboMultiplier = 2;
 
     [Header("Animation")]
-    public AnimationCurve flipCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+    public Ease flipEase = Ease.OutBack;
 
     public int TotalCards => gridWidth * gridHeight;
     public int RequiredPairs => TotalCards / 2;
