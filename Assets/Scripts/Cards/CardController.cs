@@ -26,7 +26,10 @@ public class CardController : MonoBehaviour, IPointerClickHandler
         symbolText.text = symbol;
         gameObject.SetActive(true);
         Flip();
-        Invoke(nameof(Flip), config.previewDuration);
+        if (!IsMatched)
+        {
+            Invoke(nameof(Flip), config.previewDuration);
+        }
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -49,6 +52,8 @@ public class CardController : MonoBehaviour, IPointerClickHandler
            new Vector3(0, IsFlipped ? 180 : 0, 0),
           0.5f
        ).SetEase(config.flipEase);
+
+        SoundManager.PlaySound(SoundType.CardFlip);
     }
 
     public void SetMatched()

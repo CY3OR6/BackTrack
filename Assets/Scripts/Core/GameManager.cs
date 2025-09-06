@@ -48,6 +48,8 @@ public class GameManager : MonoBehaviour
 
         gameStartTime = Time.time;
         GameEvents.OnGameStarted?.Invoke();
+
+        SoundManager.PlaySound(SoundType.GameStart);
     }
 
     private void CreateGameBoard()
@@ -103,6 +105,7 @@ public class GameManager : MonoBehaviour
             firstCard.SetMatched();
             secondCard.SetMatched();
 
+
             CurrentCombo++;
             CurrentScore += config.baseScore * (1 + CurrentCombo * config.comboMultiplier);
             MatchedPairs++;
@@ -110,6 +113,10 @@ public class GameManager : MonoBehaviour
             GameEvents.OnCardsMatched?.Invoke(firstCard, secondCard);
             GameEvents.OnScoreUpdated?.Invoke(CurrentScore);
             GameEvents.OnComboUpdated?.Invoke(CurrentCombo);
+
+            SaveSystem.SaveGame();
+
+            SoundManager.PlaySound(SoundType.CardMatch);
 
             if (MatchedPairs >= config.RequiredPairs)
             {
@@ -121,6 +128,10 @@ public class GameManager : MonoBehaviour
                     completionTime = Time.time - gameStartTime
                 };
                 GameEvents.OnGameCompleted?.Invoke(stats);
+
+                SoundManager.PlaySound(SoundType.GameEnd);
+
+                SaveSystem.ClearSave();
             }
         }
         else
@@ -131,6 +142,8 @@ public class GameManager : MonoBehaviour
 
             StartCoroutine(firstCard.ResetAfterMismatch());
             StartCoroutine(secondCard.ResetAfterMismatch());
+
+            SoundManager.PlaySound(SoundType.CardMismatch);
         }
 
         firstCard = null;
@@ -169,7 +182,6 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < saveData.cardSymbols.Count; i++)
         {
             var card = Instantiate(cardPrefab, cardParent);
-            card.Initialize(saveData.cardSymbols[i], config);
 
             if (saveData.cardMatched[i])
             {
@@ -180,6 +192,7 @@ public class GameManager : MonoBehaviour
                 card.Flip();
             }
 
+            card.Initialize(saveData.cardSymbols[i], config);
             allCards.Add(card);
         }
 
@@ -189,6 +202,8 @@ public class GameManager : MonoBehaviour
         GameEvents.OnTurnsUpdated?.Invoke(CurrentTurns);
 
         CanFlipCards = true;
+
+        SoundManager.PlaySound(SoundType.GameStart);
 
         Debug.Log($"Game loaded! Score: {CurrentScore}, Turns: {CurrentTurns}");
     }

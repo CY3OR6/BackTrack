@@ -19,6 +19,7 @@ public class UIManager : MonoBehaviour
 
     [Header("Game Over UI")]
     [SerializeField] private TMP_Text finalScoreText;
+    [SerializeField] private TMP_Text finalTurnsText;
     [SerializeField] private TMP_Text completionTimeText;
     [SerializeField] private TMP_Text efficiencyText;
 
@@ -31,6 +32,7 @@ public class UIManager : MonoBehaviour
         GameEvents.OnScoreUpdated += UpdateScore;
         GameEvents.OnComboUpdated += UpdateCombo;
         GameEvents.OnTurnsUpdated += UpdateTurns;
+        GameEvents.OnCardsMatched += (c1, c2) => UpdateProgress();
         GameEvents.OnGameCompleted += ShowGameOver;
     }
 
@@ -40,6 +42,7 @@ public class UIManager : MonoBehaviour
         GameEvents.OnScoreUpdated -= UpdateScore;
         GameEvents.OnComboUpdated -= UpdateCombo;
         GameEvents.OnTurnsUpdated -= UpdateTurns;
+        GameEvents.OnCardsMatched -= (c1, c2) => UpdateProgress();
         GameEvents.OnGameCompleted -= ShowGameOver;
     }
 
@@ -57,6 +60,11 @@ public class UIManager : MonoBehaviour
     public void OnContinueClicked()
     {
         SaveSystem.LoadGame();
+    }
+
+    public void OnQuitClicked()
+    {
+        Application.Quit();
     }
 
     private void ShowMenuPanel()
@@ -84,23 +92,32 @@ public class UIManager : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
 
+        GameManager gm = GameManager.Instance;
+
         gamePanel.SetActive(false);
         gameOverPanel.SetActive(true);
 
-        finalScoreText.text = $"Final Score: {stats.finalScore:N0}";
-        completionTimeText.text = $"Time: {stats.completionTime:F1}s";
-        efficiencyText.text = $"Efficiency: {stats.finalScore / stats.totalTurns:F1} pts/turn";
+        finalScoreText.text = $"Final Score:\n{stats.finalScore:N0}";
+        completionTimeText.text = $"Time:\n{stats.completionTime:F1}s";
+        efficiencyText.text = $"Efficiency:\n{stats.finalScore / stats.totalTurns:F1} pts/turn";
+        finalTurnsText.text = $"Turns:\n{gm.CurrentTurns}";
 
-        SaveSystem.ClearSave(); // Game completed, clear save
+        SaveSystem.ClearSave();
     }
 
-    private void UpdateScore(int score) => scoreText.text = $"Score: {score:N0}";
-    private void UpdateCombo(int combo) => comboText.text = $"Combo: x{combo}";
-    private void UpdateTurns(int turns) => turnsText.text = $"Turns: {turns}";
+    private void UpdateScore(int score) => scoreText.text = $"Score:\n{score:N0}";
+    private void UpdateCombo(int combo) => comboText.text = $"Combo:\nx{combo}";
+    private void UpdateTurns(int turns) => turnsText.text = $"Turns:\n{turns}";
+
+    private void UpdateProgress()
+    {
+        GameManager gm = GameManager.Instance;
+        progressText.text = $"Pairs:\n{gm.MatchedPairs}/{gm.config.RequiredPairs}";
+    }
 
     private void UpdateAllUI()
     {
-        var gm = GameManager.Instance;
+        GameManager gm = GameManager.Instance;
         UpdateScore(gm.CurrentScore);
         UpdateCombo(gm.CurrentCombo);
         UpdateTurns(gm.CurrentTurns);
