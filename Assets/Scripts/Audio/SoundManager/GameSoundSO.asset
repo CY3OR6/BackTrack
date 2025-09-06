@@ -44,11 +44,13 @@ MonoBehaviour:
   - name: GameStart
     volume: 1
     mixer: {fileID: 0}
-    sounds: []
+    sounds:
+    - {fileID: 8300000, guid: d0ccedf643f788b43ba644478c5db466, type: 3}
   - name: GameEnd
     volume: 1
     mixer: {fileID: 0}
-    sounds: []
+    sounds:
+    - {fileID: 8300000, guid: d0ccedf643f788b43ba644478c5db466, type: 3}
   - name: ButtonClick
     volume: 1
     mixer: {fileID: 0}
